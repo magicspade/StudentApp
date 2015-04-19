@@ -67,7 +67,7 @@ public class StudentUI extends UI {
 		TabSheet table = new TabSheet();
 		
 		table.addTab(studentLayout(),"Students");
-		table.addTab(projectLayout(),"Projects");
+		//table.addTab(projectLayout(),"Projects");
 		
 		layout.addComponent(table);
 		
@@ -362,5 +362,5 @@ public class StudentUI extends UI {
 		layout.addComponent(buttonLayout);
 	}
 
-	// PROJTECS -----------------------------
+	// PROJECTS -----------------------------
 }
