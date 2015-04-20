@@ -40,8 +40,8 @@ import com.vaadin.ui.Window;
 @Theme("studentapp")
 public class StudentUI extends UI {
 	
-//	final StudentEJB studentEjb = new StudentEJB();
-//	final ProjectEJB projectEjb = new ProjectEJB();
+	final StudentEJB studentEjb = new StudentEJB();
+	final ProjectEJB projectEjb = new ProjectEJB();
 
 	@WebServlet(value = "/*", asyncSupported = true)
 	@VaadinServletConfiguration(productionMode = false, ui = StudentUI.class)
@@ -50,12 +50,7 @@ public class StudentUI extends UI {
 
 	@Override
 	protected void init(VaadinRequest request) {	
-		
-		/*try {
-		    Class.forName( "com.mysql.jdbc.Driver" );
-		} catch ( ClassNotFoundException e ) {
-		}*/
-				
+						
 		final VerticalLayout layout = new VerticalLayout();
 		layout.setMargin(true);
 		setContent(layout);
@@ -116,46 +111,42 @@ public class StudentUI extends UI {
 		
 		layout.addComponent(toolBar);
 		
-//		List<Student> data = studentEjb.findStudents();
-		// TO DELETE --------------------------
-		List<Student> data = new ArrayList<Student>();
-		Student lol = new Student();
-		lol.setName("bob");
-		lol.setAddress("12 rue paul");
-		lol.setAge(42);
-		lol.setStudentID(1024l);
-		data.add(lol);
-		// ------------------------------------
-				
-		Table table = new Table("Students");
-		BeanItemContainer<Student> dSource = new BeanItemContainer<Student>(Student.class);
-		table.setContainerDataSource(dSource);
-		dSource.addAll(data);
-		//Formatting
-		table.setWidth("100%");
-		table.setPageLength(0);
-		table.setSelectable(true);
-		table.setVisibleColumns( new Object[] {"studentID", "name", "age", "address"} );
-		table.setColumnHeaders(new String[] {"ID", "Name", "Age", "Address"});
-		layout.addComponent(table);
+		try {
+			List<Student> data = studentEjb.findStudents();
 		
-		//Filters
-		filter.addTextChangeListener(new TextChangeListener() {
-		    Filter filter = null;
+			Table table = new Table("Students");
+			BeanItemContainer<Student> dSource = new BeanItemContainer<Student>(Student.class);
+			table.setContainerDataSource(dSource);
+			dSource.addAll(data);
+			//Formatting
+			table.setWidth("100%");
+			table.setPageLength(0);
+			table.setSelectable(true);
+			table.setVisibleColumns( new Object[] {"studentID", "name", "age", "address"} );
+			table.setColumnHeaders(new String[] {"ID", "Name", "Age", "Address"});
+			layout.addComponent(table);
 
-		    public void textChange(TextChangeEvent event) {
-		        Filterable f = (Filterable) dSource;
-		        if (filter != null) {
-		            f.removeContainerFilter(filter);
-		        }
-		        filter = new Or(new SimpleStringFilter("studentID", event.getText(), true, false),
-		        				new SimpleStringFilter("name", event.getText(), true, false),
-		        				new SimpleStringFilter("age", event.getText(), true, false),
-		        				new SimpleStringFilter("address", event.getText(), true, false)
-		        		);
-		        f.addContainerFilter(filter);
-		    }
-		});
+			//Filters
+			filter.addTextChangeListener(new TextChangeListener() {
+			    Filter filter = null;
+	
+			    public void textChange(TextChangeEvent event) {
+			        Filterable f = (Filterable) dSource;
+			        if (filter != null) {
+			            f.removeContainerFilter(filter);
+			        }
+			        filter = new Or(new SimpleStringFilter("studentID", event.getText(), true, false),
+			        				new SimpleStringFilter("name", event.getText(), true, false),
+			        				new SimpleStringFilter("age", event.getText(), true, false),
+			        				new SimpleStringFilter("address", event.getText(), true, false)
+			        		);
+			        f.addContainerFilter(filter);
+			    }
+			});
+		}
+		catch (Exception e) {
+			layout.addComponent(new Label("Unable to load students"));
+		}
 		
 		return layout;
 	}
@@ -212,7 +203,7 @@ public class StudentUI extends UI {
 					s.setAddress(address);
 					s.setAge(age);
 					try {
-//						studentEjb.addStudent(s);
+						studentEjb.addStudent(s);
 						removeWindow(window);
 						showNotification("Student Created");
 					}
@@ -257,14 +248,8 @@ public class StudentUI extends UI {
 			public void buttonClick(ClickEvent event) {		
 				try {
 					long id = Long.parseLong(idField.getValue());
-//					Student student = studentEjb.findStudentById(id);
-					// TO DELETE --------------------------
-					Student student = new Student();
-					student.setName("bob");
-					student.setAddress("12 rue paul");
-					student.setAge(42);
-					student.setStudentID(1024l);
-					// ------------------------------------ 
+					Student student = studentEjb.findStudentById(id);
+					
 					if (student != null) {
 						removeWindow(window);
 						if (arg == "update") {
@@ -353,7 +338,7 @@ public class StudentUI extends UI {
 					student.setAddress(address);
 					student.setAge(age);
 					try {
-//						studentEjb.updateStudent(student);
+						studentEjb.updateStudent(student);
 						removeWindow(window);
 						showNotification("Student Updated");
 					}
@@ -369,7 +354,7 @@ public class StudentUI extends UI {
 		deleteButton.addClickListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
 				try {
-//					studentEjb.deleteStudent(student);
+					studentEjb.deleteStudent(student);
 					removeWindow(window);
 					showNotification("Student Deleted");
 				}
@@ -393,27 +378,24 @@ public class StudentUI extends UI {
 		window.setResizable(false);
 		addWindow(window);
 		
-//		List<Project> data = projectEjb.findProjectsFromStudent(student.getStudentId());
-		// TO DELETE --------------------------
-		List<Project> data = new ArrayList<Project>();
-		Project lol = new Project();
-		lol.setTitle("Dat Big Project");
-		lol.setOwnerID(1024l);
-		lol.setProjectID(404l);
-		data.add(lol);
-		// ------------------------------------
-		
-		Table table = new Table("Projects of " + student.getStudentID() + "(" + student.getName() + ")");
-		BeanItemContainer<Project> dSource = new BeanItemContainer<Project>(Project.class);
-		dSource.addAll(data);
-		table.setContainerDataSource(dSource);
-		//Formatting
-		table.setWidth("100%");
-		table.setPageLength(0);
-		table.setSelectable(true);
-		table.setVisibleColumns( new Object[] {"projectID", "title"} );
-		table.setColumnHeaders(new String[] {"Project ID", "Title"});
-		layout.addComponent(table);
+		try {
+			List<Project> data = projectEjb.findProjectsFromStudent(student.getStudentID());
+			
+			Table table = new Table("Projects of " + student.getStudentID() + "(" + student.getName() + ")");
+			BeanItemContainer<Project> dSource = new BeanItemContainer<Project>(Project.class);
+			dSource.addAll(data);
+			table.setContainerDataSource(dSource);
+			//Formatting
+			table.setWidth("100%");
+			table.setPageLength(0);
+			table.setSelectable(true);
+			table.setVisibleColumns( new Object[] {"projectID", "title"} );
+			table.setColumnHeaders(new String[] {"Project ID", "Title"});
+			layout.addComponent(table);
+		}
+		catch (Exception e) {
+			layout.addComponent(new Label("Unable to load projects"));
+		}
 	}
 	
 	// PROJECTS -----------------------------
@@ -449,45 +431,41 @@ public class StudentUI extends UI {
 			
 			layout.addComponent(toolBar);
 			
-//			List<Project> data = studentEjb.findProjects();
-			// TO DELETE --------------------------
-			List<Project> data = new ArrayList<Project>();
-			Project lol = new Project();
-			lol.setTitle("Dat Big Project");
-			lol.setOwnerID(1024l);
-			lol.setProjectID(404l);
-			data.add(lol);
-			// ------------------------------------
-					
-			Table table = new Table("Projects");
-			BeanItemContainer<Project> dSource = new BeanItemContainer<Project>(Project.class);
-			table.setContainerDataSource(dSource);
-			dSource.addAll(data);
-			//Formatting
-			table.setWidth("100%");
-			table.setPageLength(0);
-			table.setSelectable(true);
-			table.setVisibleColumns( new Object[] {"projectID", "title", "ownerID"} );
-			table.setColumnHeaders(new String[] {"Project ID", "Title", "Owner ID"});
-			layout.addComponent(table);
-			
-			//Filters
-			filter.addTextChangeListener(new TextChangeListener() {
-			    Filter filter = null;
-	
-			    public void textChange(TextChangeEvent event) {
-			        Filterable f = (Filterable) dSource;
-			        if (filter != null) {
-			            f.removeContainerFilter(filter);
-			        }
-			        filter = new Or(new SimpleStringFilter("projectID", event.getText(), true, false),
-			        				new SimpleStringFilter("title", event.getText(), true, false),
-			        				new SimpleStringFilter("ownerID", event.getText(), true, false)
-			        		);
-			        f.addContainerFilter(filter);
-			    }
-			});
-			
+			try {
+				List<Project> data = projectEjb.findProjects();
+						
+				Table table = new Table("Projects");
+				BeanItemContainer<Project> dSource = new BeanItemContainer<Project>(Project.class);
+				table.setContainerDataSource(dSource);
+				dSource.addAll(data);
+				//Formatting
+				table.setWidth("100%");
+				table.setPageLength(0);
+				table.setSelectable(true);
+				table.setVisibleColumns( new Object[] {"projectID", "title", "ownerID"} );
+				table.setColumnHeaders(new String[] {"Project ID", "Title", "Owner ID"});
+				layout.addComponent(table);
+				
+				//Filters
+				filter.addTextChangeListener(new TextChangeListener() {
+				    Filter filter = null;
+		
+				    public void textChange(TextChangeEvent event) {
+				        Filterable f = (Filterable) dSource;
+				        if (filter != null) {
+				            f.removeContainerFilter(filter);
+				        }
+				        filter = new Or(new SimpleStringFilter("projectID", event.getText(), true, false),
+				        				new SimpleStringFilter("title", event.getText(), true, false),
+				        				new SimpleStringFilter("ownerID", event.getText(), true, false)
+				        		);
+				        f.addContainerFilter(filter);
+				    }
+				});
+			}
+			catch (Exception e){
+				layout.addComponent(new Label("Unable to load projects"));
+			}
 			return layout;
 		}
 	
@@ -520,7 +498,7 @@ public class StudentUI extends UI {
 					p.setTitle(title);
 					p.setOwnerID(student.getStudentID());
 					try {
-//						projectEjb.addProject(p);
+						projectEjb.addProject(p);
 						removeWindow(window);
 						showNotification("Project Created");
 					}
@@ -555,12 +533,8 @@ public class StudentUI extends UI {
 				
 				try {
 					long id = Long.parseLong(idField.getValue());
-//					Project project = projectEjb.findProjectById(id);
-					// TO DELETE --------------------------
-					Project project = new Project();
-					project.setTitle("Dat awesome project");
-					project.setProjectID(404l);
-					// ------------------------------------ 
+					Project project = projectEjb.findProjectById(id);
+					
 					if (project != null) {
 						removeWindow(window);
 						updateProject(project);
@@ -622,14 +596,14 @@ public class StudentUI extends UI {
 					}
 				}
 				
-//				Student owner = studentEjb.findStudentById(ownerID);
-				// TO DELETE --------------------------
-				Student owner = new Student();
-				owner.setName("bob");
-				owner.setAddress("12 rue paul");
-				owner.setAge(42);
-				owner.setStudentID(1024l);
-				// ------------------------------------ 
+				Student owner = null;
+				try {
+					owner = studentEjb.findStudentById(ownerID);
+				}
+				catch (Exception e) {	
+					owner = null;
+				}
+
 				if (owner == null) {
 					argOk = false;
 					showNotification("Owner student not found",Notification.TYPE_ERROR_MESSAGE);
@@ -639,7 +613,7 @@ public class StudentUI extends UI {
 					project.setTitle(title);
 					project.setOwnerID(ownerID);
 					try {
-//						projectEjb.updateProject(project);
+						projectEjb.updateProject(project);
 						removeWindow(window);
 						showNotification("Project Updated");
 					}
@@ -655,7 +629,7 @@ public class StudentUI extends UI {
 		deleteButton.addClickListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
 				try {
-//					projectEjb.deleteProject(project);
+					projectEjb.deleteProject(project);
 					removeWindow(window);
 					showNotification("Project Deleted");
 				}

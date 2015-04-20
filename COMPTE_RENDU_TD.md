@@ -3,8 +3,6 @@ Compte rendu TD 02
 
 L'application s'utilise de manière intuitive grâce à l'interface graphique qui permet pour le moment de créer, modifier et supprimer des étudiants. La fonction findById de l'EJB est utilisé pour sélectionner l'étudiant à modifier/supprimer, la fonction find est quant à elle utilisée pour afficher le tableau des étudiants.
 
-N.B : A l'heure actuelle, l'injection de l'EJB fait planter le serveur (erreur 500). Je cherche activement l'origine de cette erreur mais je n'ai pas encore réussi à la résoudre. Les tests de l'UI sont donc fait avec des objets codés en dur, néanmoins, toutes les lignes devant normalement faire intervenir les ejb ont été écrites et sont commenté avec le // en tout début de ligne.
-
 ----------
 
 Question 1
