@@ -133,7 +133,7 @@ public class StudentUI extends UI {
 		dSource.addAll(data);
 		//Formatting
 		table.setWidth("100%");
-		table.setHeight("50%");
+		table.setPageLength(0);
 		table.setSelectable(true);
 		table.setVisibleColumns( new Object[] {"studentID", "name", "age", "address"} );
 		table.setColumnHeaders(new String[] {"ID", "Name", "Age", "Address"});
@@ -409,6 +409,7 @@ public class StudentUI extends UI {
 		table.setContainerDataSource(dSource);
 		//Formatting
 		table.setWidth("100%");
+		table.setPageLength(0);
 		table.setSelectable(true);
 		table.setVisibleColumns( new Object[] {"projectID", "title"} );
 		table.setColumnHeaders(new String[] {"Project ID", "Title"});
@@ -464,6 +465,7 @@ public class StudentUI extends UI {
 			dSource.addAll(data);
 			//Formatting
 			table.setWidth("100%");
+			table.setPageLength(0);
 			table.setSelectable(true);
 			table.setVisibleColumns( new Object[] {"projectID", "title", "ownerID"} );
 			table.setColumnHeaders(new String[] {"Project ID", "Title", "Owner ID"});
