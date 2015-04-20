@@ -13,27 +13,20 @@ public class ProjectEJB {
 		
 	@SuppressWarnings("unchecked")
 	public List<Project> findProjects() throws Exception {
-		em.getTransaction().begin();
 		Query query = em.createQuery("SELECT p FROM Project p");
-		em.getTransaction().commit();
 		return query.getResultList();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Project> findProjectsFromStudent(long id) throws Exception {
-		em.getTransaction().begin();
 		Query query = em.createQuery("SELECT p FROM Project p WHERE p.ownerID LIKE :id ");
 		query.setParameter("id", id);
-		List<Project> res = query.getResultList();
-		em.getTransaction().commit();
-		return res;
+		return query.getResultList();
+
 	}
 	
 	public Project findProjectById(long id) throws Exception {
-		em.getTransaction().begin();
-		Project res = em.find(Project.class, id);
-		em.getTransaction().commit();
-		return res;
+		return em.find(Project.class, id);
 	}
 	
 	public void addProject(Project p) throws Exception {

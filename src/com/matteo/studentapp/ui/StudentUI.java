@@ -115,9 +115,9 @@ public class StudentUI extends UI {
 			List<Student> data = studentEjb.findStudents();
 		
 			Table table = new Table("Students");
-			BeanItemContainer<Student> dSource = new BeanItemContainer<Student>(Student.class);
-			table.setContainerDataSource(dSource);
-			dSource.addAll(data);
+			BeanItemContainer<Student> studentSource = new BeanItemContainer<Student>(Student.class);
+			table.setContainerDataSource(studentSource);
+			studentSource.addAll(data);
 			//Formatting
 			table.setWidth("100%");
 			table.setPageLength(0);
@@ -131,7 +131,7 @@ public class StudentUI extends UI {
 			    Filter filter = null;
 	
 			    public void textChange(TextChangeEvent event) {
-			        Filterable f = (Filterable) dSource;
+			        Filterable f = (Filterable) studentSource;
 			        if (filter != null) {
 			            f.removeContainerFilter(filter);
 			        }
@@ -204,6 +204,7 @@ public class StudentUI extends UI {
 					s.setAge(age);
 					try {
 						studentEjb.addStudent(s);
+						refreshStudents();
 						removeWindow(window);
 						showNotification("Student Created");
 					}
@@ -349,6 +350,7 @@ public class StudentUI extends UI {
 					student.setAge(age);
 					try {
 						studentEjb.updateStudent(student);
+						refreshStudents();
 						removeWindow(window);
 						showNotification("Student Updated");
 					}
@@ -365,6 +367,7 @@ public class StudentUI extends UI {
 			public void buttonClick(ClickEvent event) {
 				try {
 					studentEjb.deleteStudent(student);
+					refreshStudents();
 					removeWindow(window);
 					showNotification("Student Deleted");
 				}
@@ -445,9 +448,9 @@ public class StudentUI extends UI {
 				List<Project> data = projectEjb.findProjects();
 						
 				Table table = new Table("Projects");
-				BeanItemContainer<Project> dSource = new BeanItemContainer<Project>(Project.class);
-				table.setContainerDataSource(dSource);
-				dSource.addAll(data);
+				BeanItemContainer<Project> projectSource = new BeanItemContainer<Project>(Project.class);
+				table.setContainerDataSource(projectSource);
+				projectSource.addAll(data);
 				//Formatting
 				table.setWidth("100%");
 				table.setPageLength(0);
@@ -461,7 +464,7 @@ public class StudentUI extends UI {
 				    Filter filter = null;
 		
 				    public void textChange(TextChangeEvent event) {
-				        Filterable f = (Filterable) dSource;
+				        Filterable f = (Filterable) projectSource;
 				        if (filter != null) {
 				            f.removeContainerFilter(filter);
 				        }
@@ -509,6 +512,7 @@ public class StudentUI extends UI {
 					p.setOwnerID(student.getStudentID());
 					try {
 						projectEjb.addProject(p);
+						refreshProjects();
 						removeWindow(window);
 						showNotification("Project Created");
 					}
@@ -541,22 +545,33 @@ public class StudentUI extends UI {
 		button.addClickListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
 				
+				long id = 0;
+				
 				try {
-					long id = Long.parseLong(idField.getValue());
-					Project project = projectEjb.findProjectById(id);
-					
-					if (project != null) {
-						removeWindow(window);
-						updateProject(project);
-					}
-					else {
-						showNotification("Project not found",Notification.TYPE_ERROR_MESSAGE);
-					}
+					id = Long.parseLong(idField.getValue());
 				}
 				catch (Exception e){
 					showNotification("Incorrect data","ID must be an integer.",Notification.TYPE_ERROR_MESSAGE);
 
-				}			
+				}	
+				
+				Project project = null;
+				
+				try {
+					project = projectEjb.findProjectById(id);
+				}
+				catch (Exception e) {
+					project = null;
+					showNotification("Can't found project : " + e.getMessage(),Notification.TYPE_ERROR_MESSAGE);
+				}
+				
+				if (project != null && id > 0) {
+					removeWindow(window);
+					updateProject(project);
+				}
+				else if (id > 0){
+					showNotification("Project not found",Notification.TYPE_ERROR_MESSAGE);
+				}		
 			}
 		});
 		layout.addComponent(button);
@@ -624,6 +639,7 @@ public class StudentUI extends UI {
 					project.setOwnerID(ownerID);
 					try {
 						projectEjb.updateProject(project);
+						refreshProjects();
 						removeWindow(window);
 						showNotification("Project Updated");
 					}
@@ -640,6 +656,7 @@ public class StudentUI extends UI {
 			public void buttonClick(ClickEvent event) {
 				try {
 					projectEjb.deleteProject(project);
+					refreshProjects();
 					removeWindow(window);
 					showNotification("Project Deleted");
 				}
@@ -652,5 +669,29 @@ public class StudentUI extends UI {
 		
 		layout.addComponent(buttonLayout);
 	}
+	
+	
+	private void refreshStudents() {
+		/*try {
+			List<Student> data = studentEjb.findStudents();
+			studentSource = new BeanItemContainer<Student>(Student.class);
+			studentSource.addAll(data);
+		}
+		catch (Exception e) {
+			showNotification("Unable to update students list");
+		}*/
+	}
+
+	private void refreshProjects() {
+		/*try {
+			List<Project> data = projectEjb.findProjects();
+			projectSource = new BeanItemContainer<Project>(Project.class);
+			projectSource.addAll(data);
+		}
+		catch (Exception e) {
+			showNotification("Unable to update students list");
+		}*/
+	}
+	
 
 }

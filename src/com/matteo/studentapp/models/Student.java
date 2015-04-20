@@ -9,7 +9,7 @@ public class Student implements Serializable {
 	 private static final long serialVersionUID = 1L;
 	
 	 @Id
-	 @GeneratedValue(strategy = GenerationType.AUTO)
+	 @GeneratedValue(strategy = GenerationType.IDENTITY)
 	 private Long studentID; 
 	 private String name;
 	 private String address;
