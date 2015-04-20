@@ -40,8 +40,8 @@ import com.vaadin.ui.Window;
 @Theme("studentapp")
 public class StudentUI extends UI {
 	
-	final StudentEJB studentEjb = new StudentEJB();
-	final ProjectEJB projectEjb = new ProjectEJB();
+//	final StudentEJB studentEjb = new StudentEJB();
+//	final ProjectEJB projectEjb = new ProjectEJB();
 
 	@WebServlet(value = "/*", asyncSupported = true)
 	@VaadinServletConfiguration(productionMode = false, ui = StudentUI.class)
@@ -133,6 +133,7 @@ public class StudentUI extends UI {
 		dSource.addAll(data);
 		//Formatting
 		table.setWidth("100%");
+		table.setHeight("50%");
 		table.setSelectable(true);
 		table.setVisibleColumns( new Object[] {"studentID", "name", "age", "address"} );
 		table.setColumnHeaders(new String[] {"ID", "Name", "Age", "Address"});
