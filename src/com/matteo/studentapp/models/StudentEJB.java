@@ -13,23 +13,35 @@ public class StudentEJB {
 	
 	@SuppressWarnings("unchecked")
 	public List<Student> findStudents() throws Exception {
-		Query query = em.createQuery("SELECT * FROM Student s");
-		return query.getResultList();
+		em.getTransaction().begin();
+		Query query = em.createQuery("SELECT * FROM Student");
+		List<Student> res = query.getResultList();
+		em.getTransaction().commit();
+		return res;
 	}
 	
 	public Student findStudentById(long id) throws Exception {
-		return em.find(Student.class, id);
+		em.getTransaction().begin();
+		Student res = em.find(Student.class, id);
+		em.getTransaction().commit();
+		return res;
 	}
 	
 	public void addStudent(Student s) throws Exception {
+		em.getTransaction().begin();
 		em.persist(s);
+		em.getTransaction().commit();
 	}
 	
 	public void deleteStudent(Student s) throws Exception {
+		em.getTransaction().begin();
 		em.remove(s);
+		em.getTransaction().commit();
 	}
 
 	public void updateStudent(Student s) throws Exception {
+		em.getTransaction().begin();
 		em.merge(s);
+		em.getTransaction().commit();
 	}
 }
