@@ -145,7 +145,7 @@ public class StudentUI extends UI {
 			});
 		}
 		catch (Exception e) {
-			layout.addComponent(new Label("Unable to load students"));
+			layout.addComponent(new Label("Unable to load students : " + e.getMessage()));
 		}
 		
 		return layout;
@@ -208,7 +208,7 @@ public class StudentUI extends UI {
 						showNotification("Student Created");
 					}
 					catch (Exception e) {
-						showNotification("Error creating student", Notification.TYPE_ERROR_MESSAGE);
+						showNotification("Error creating student : " + e.getMessage(), Notification.TYPE_ERROR_MESSAGE);
 					}		
 				}	
 			}
@@ -245,12 +245,27 @@ public class StudentUI extends UI {
 		
 		Button button = new Button("Find it");
 		button.addClickListener(new Button.ClickListener() {
-			public void buttonClick(ClickEvent event) {		
-				try {
-					long id = Long.parseLong(idField.getValue());
-					Student student = studentEjb.findStudentById(id);
+			public void buttonClick(ClickEvent event) {
+				
+					long id = 0;
 					
-					if (student != null) {
+					try {
+						id = Long.parseLong(idField.getValue());
+					}
+					catch (Exception e){
+						showNotification("Incorrect data","ID must be an integer.",Notification.TYPE_ERROR_MESSAGE);
+					}
+					
+					Student student = null;
+					
+					try {
+						student = studentEjb.findStudentById(id);
+					}
+					catch (Exception e) {
+						showNotification("Unable to find student : " + e.getMessage(),Notification.TYPE_ERROR_MESSAGE);
+					} 
+					
+					if (student != null && id > 0) {
 						removeWindow(window);
 						if (arg == "update") {
 							updateStudent(student);
@@ -262,15 +277,10 @@ public class StudentUI extends UI {
 							showProjects(student);
 						}
 					}
-					else {
+					else if (id > 0) {
 						showNotification("Student not found",Notification.TYPE_ERROR_MESSAGE);
 					}
-				}
-				catch (Exception e){
-					showNotification("Incorrect data","ID must be an integer.",Notification.TYPE_ERROR_MESSAGE);
-
 				}			
-			}
 		});
 		layout.addComponent(button);
 		layout.setComponentAlignment(button, Alignment.TOP_CENTER);
@@ -343,7 +353,7 @@ public class StudentUI extends UI {
 						showNotification("Student Updated");
 					}
 					catch (Exception e) {
-						showNotification("Error updating student", Notification.TYPE_ERROR_MESSAGE);
+						showNotification("Error updating student : " + e.getMessage(), Notification.TYPE_ERROR_MESSAGE);
 					}		
 				}	
 			}
@@ -359,7 +369,7 @@ public class StudentUI extends UI {
 					showNotification("Student Deleted");
 				}
 				catch (Exception e) {
-					showNotification("Error deleting student", Notification.TYPE_ERROR_MESSAGE);
+					showNotification("Error deleting student : " + e.getMessage(), Notification.TYPE_ERROR_MESSAGE);
 				}	
 			}
 		});
@@ -394,7 +404,7 @@ public class StudentUI extends UI {
 			layout.addComponent(table);
 		}
 		catch (Exception e) {
-			layout.addComponent(new Label("Unable to load projects"));
+			layout.addComponent(new Label("Unable to load projects : " + e.getMessage()));
 		}
 	}
 	
@@ -464,7 +474,7 @@ public class StudentUI extends UI {
 				});
 			}
 			catch (Exception e){
-				layout.addComponent(new Label("Unable to load projects"));
+				layout.addComponent(new Label("Unable to load projects : " + e.getMessage()));
 			}
 			return layout;
 		}
@@ -503,7 +513,7 @@ public class StudentUI extends UI {
 						showNotification("Project Created");
 					}
 					catch (Exception e) {
-						showNotification("Error creating project", Notification.TYPE_ERROR_MESSAGE);
+						showNotification("Error creating project + " + e.getMessage(), Notification.TYPE_ERROR_MESSAGE);
 					}		
 				}	
 			}
