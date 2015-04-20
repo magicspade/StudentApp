@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Stateless
 public class StudentEJB {
 	
-	private EntityManagerFactory emf = Persistence.createEntityManagerFactory("StudentApp");
+	private EntityManagerFactory emf = Persistence.createEntityManagerFactory("");
 	private EntityManager em = emf.createEntityManager() ;
 	
 	@SuppressWarnings("unchecked")

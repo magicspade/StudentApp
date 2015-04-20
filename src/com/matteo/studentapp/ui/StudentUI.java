@@ -7,6 +7,7 @@ import javax.ejb.EJB;
 import javax.servlet.annotation.WebServlet;
 
 import com.matteo.studentapp.models.Project;
+import com.matteo.studentapp.models.ProjectEJB;
 import com.matteo.studentapp.models.Student;
 import com.matteo.studentapp.models.StudentEJB;
 import com.sun.java.swing.plaf.windows.resources.windows;
@@ -39,7 +40,8 @@ import com.vaadin.ui.Window;
 @Theme("studentapp")
 public class StudentUI extends UI {
 	
-//	final StudentEJB ejb = new StudentEJB();
+	final StudentEJB studentEjb = new StudentEJB();
+	final ProjectEJB projectEjb = new ProjectEJB();
 
 	@WebServlet(value = "/*", asyncSupported = true)
 	@VaadinServletConfiguration(productionMode = false, ui = StudentUI.class)
@@ -114,7 +116,7 @@ public class StudentUI extends UI {
 		
 		layout.addComponent(toolBar);
 		
-//		List<Student> data = ejb.findStudents();
+//		List<Student> data = studentEjb.findStudents();
 		// TO DELETE --------------------------
 		List<Student> data = new ArrayList<Student>();
 		Student lol = new Student();
@@ -209,7 +211,7 @@ public class StudentUI extends UI {
 					s.setAddress(address);
 					s.setAge(age);
 					try {
-//						ejb.addStudent(s);
+//						studentEjb.addStudent(s);
 						removeWindow(window);
 						showNotification("Student Created");
 					}
@@ -254,7 +256,7 @@ public class StudentUI extends UI {
 			public void buttonClick(ClickEvent event) {		
 				try {
 					long id = Long.parseLong(idField.getValue());
-//					Student student = ejb.findStudentById(id);
+//					Student student = studentEjb.findStudentById(id);
 					// TO DELETE --------------------------
 					Student student = new Student();
 					student.setName("bob");
@@ -350,7 +352,7 @@ public class StudentUI extends UI {
 					student.setAddress(address);
 					student.setAge(age);
 					try {
-//						ejb.updateStudent(student);
+//						studentEjb.updateStudent(student);
 						removeWindow(window);
 						showNotification("Student Updated");
 					}
@@ -366,7 +368,7 @@ public class StudentUI extends UI {
 		deleteButton.addClickListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
 				try {
-//					ejb.deleteStudent(student);
+//					studentEjb.deleteStudent(student);
 					removeWindow(window);
 					showNotification("Student Deleted");
 				}
@@ -390,7 +392,7 @@ public class StudentUI extends UI {
 		window.setResizable(false);
 		addWindow(window);
 		
-//		List<Project> data = ejb.findProjectsFromStudent(student.getStudentId());
+//		List<Project> data = projectEjb.findProjectsFromStudent(student.getStudentId());
 		// TO DELETE --------------------------
 		List<Project> data = new ArrayList<Project>();
 		Project lol = new Project();
@@ -445,7 +447,7 @@ public class StudentUI extends UI {
 			
 			layout.addComponent(toolBar);
 			
-//			List<Project> data = ejb.findProjects();
+//			List<Project> data = studentEjb.findProjects();
 			// TO DELETE --------------------------
 			List<Project> data = new ArrayList<Project>();
 			Project lol = new Project();
@@ -515,7 +517,7 @@ public class StudentUI extends UI {
 					p.setTitle(title);
 					p.setOwnerID(student.getStudentID());
 					try {
-//						ejb.addProject(p);
+//						projectEjb.addProject(p);
 						removeWindow(window);
 						showNotification("Project Created");
 					}
@@ -550,7 +552,7 @@ public class StudentUI extends UI {
 				
 				try {
 					long id = Long.parseLong(idField.getValue());
-//					Project project = ejb.findProjectById(id);
+//					Project project = projectEjb.findProjectById(id);
 					// TO DELETE --------------------------
 					Project project = new Project();
 					project.setTitle("Dat awesome project");
@@ -617,7 +619,7 @@ public class StudentUI extends UI {
 					}
 				}
 				
-//				Student owner = ejb.findStudentById(ownerID);
+//				Student owner = studentEjb.findStudentById(ownerID);
 				// TO DELETE --------------------------
 				Student owner = new Student();
 				owner.setName("bob");
@@ -634,7 +636,7 @@ public class StudentUI extends UI {
 					project.setTitle(title);
 					project.setOwnerID(ownerID);
 					try {
-//						ejb.updateProject(project);
+//						projectEjb.updateProject(project);
 						removeWindow(window);
 						showNotification("Project Updated");
 					}
@@ -650,7 +652,7 @@ public class StudentUI extends UI {
 		deleteButton.addClickListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
 				try {
-//					ejb.deleteProject(project);
+//					projectEjb.deleteProject(project);
 					removeWindow(window);
 					showNotification("Project Deleted");
 				}
