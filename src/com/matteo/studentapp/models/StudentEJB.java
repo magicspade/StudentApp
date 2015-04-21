@@ -29,6 +29,9 @@ public class StudentEJB {
 	
 	public void deleteStudent(Student s) throws Exception {
 		em.getTransaction().begin();
+		Query query = em.createQuery("DELETE FROM Project p WHERE p.ownerID = :id");
+		query.setParameter("id", s.getStudentID());
+		query.executeUpdate();
 		em.remove(s);
 		em.getTransaction().commit();
 	}

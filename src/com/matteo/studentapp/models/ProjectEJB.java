@@ -19,7 +19,7 @@ public class ProjectEJB {
 	
 	@SuppressWarnings("unchecked")
 	public List<Project> findProjectsFromStudent(long id) throws Exception {
-		Query query = em.createQuery("SELECT p FROM Project p WHERE p.ownerID LIKE :id ");
+		Query query = em.createQuery("SELECT p FROM Project p WHERE p.ownerID = :id ");
 		query.setParameter("id", id);
 		return query.getResultList();
 
