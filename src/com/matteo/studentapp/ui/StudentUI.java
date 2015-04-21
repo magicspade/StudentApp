@@ -42,6 +42,8 @@ public class StudentUI extends UI {
 	
 	final StudentEJB studentEjb = new StudentEJB();
 	final ProjectEJB projectEjb = new ProjectEJB();
+	private BeanItemContainer<Student> studentSource = new BeanItemContainer<Student>(Student.class);
+	private BeanItemContainer<Project> projectSource = new BeanItemContainer<Project>(Project.class);
 
 	@WebServlet(value = "/*", asyncSupported = true)
 	@VaadinServletConfiguration(productionMode = false, ui = StudentUI.class)
@@ -115,7 +117,7 @@ public class StudentUI extends UI {
 			List<Student> data = studentEjb.findStudents();
 		
 			Table table = new Table("Students");
-			BeanItemContainer<Student> studentSource = new BeanItemContainer<Student>(Student.class);
+			studentSource = new BeanItemContainer<Student>(Student.class);
 			table.setContainerDataSource(studentSource);
 			studentSource.addAll(data);
 			//Formatting
@@ -448,7 +450,7 @@ public class StudentUI extends UI {
 				List<Project> data = projectEjb.findProjects();
 						
 				Table table = new Table("Projects");
-				BeanItemContainer<Project> projectSource = new BeanItemContainer<Project>(Project.class);
+				projectSource = new BeanItemContainer<Project>(Project.class);
 				table.setContainerDataSource(projectSource);
 				projectSource.addAll(data);
 				//Formatting
@@ -672,25 +674,25 @@ public class StudentUI extends UI {
 	
 	
 	private void refreshStudents() {
-		/*try {
+		try {
 			List<Student> data = studentEjb.findStudents();
-			studentSource = new BeanItemContainer<Student>(Student.class);
+			studentSource.removeAllItems();
 			studentSource.addAll(data);
 		}
 		catch (Exception e) {
 			showNotification("Unable to update students list");
-		}*/
+		}
 	}
 
 	private void refreshProjects() {
-		/*try {
+		try {
 			List<Project> data = projectEjb.findProjects();
-			projectSource = new BeanItemContainer<Project>(Project.class);
+			projectSource.removeAllItems();
 			projectSource.addAll(data);
 		}
 		catch (Exception e) {
-			showNotification("Unable to update students list");
-		}*/
+			showNotification("Unable to update projects list");
+		}
 	}
 	
 
