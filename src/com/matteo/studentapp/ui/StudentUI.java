@@ -370,6 +370,7 @@ public class StudentUI extends UI {
 				try {
 					studentEjb.deleteStudent(student);
 					refreshStudents();
+					refreshProjects(); //projects might be deleted with student
 					removeWindow(window);
 					showNotification("Student Deleted");
 				}
