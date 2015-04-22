@@ -392,26 +392,42 @@ public class StudentUI extends UI {
 		Window window = new Window("Student projects",layout);
 		window.setModal(true);
 		window.setResizable(false);
+		window.setWidth("40%");
 		addWindow(window);
 		
 		try {
 			List<Project> data = projectEjb.findProjectsFromStudent(student.getStudentID());
 			
-			Table table = new Table("Projects of " + student.getStudentID() + "(" + student.getName() + ")");
-			BeanItemContainer<Project> dSource = new BeanItemContainer<Project>(Project.class);
-			dSource.addAll(data);
-			table.setContainerDataSource(dSource);
-			//Formatting
-			table.setWidth("100%");
-			table.setPageLength(0);
-			table.setSelectable(true);
-			table.setVisibleColumns( new Object[] {"projectID", "title"} );
-			table.setColumnHeaders(new String[] {"Project ID", "Title"});
-			layout.addComponent(table);
+			if(data.isEmpty()) {
+				layout.addComponent(new Label("This student doesn't have any project yet."));
+			}
+			else {
+				Table table = new Table("Projects of " + student.getStudentID() + " (" + student.getName() + ")");
+				BeanItemContainer<Project> dSource = new BeanItemContainer<Project>(Project.class);
+				dSource.addAll(data);
+				table.setContainerDataSource(dSource);
+				//Formatting
+				table.setWidth("100%");
+				table.setPageLength(0);
+				table.setSelectable(true);
+				table.setVisibleColumns( new Object[] {"projectID", "title"} );
+				table.setColumnHeaders(new String[] {"Project ID", "Title"});
+				layout.addComponent(table);
+			}
 		}
 		catch (Exception e) {
 			layout.addComponent(new Label("Unable to load projects : " + e.getMessage()));
 		}
+		
+		Button addProjectButton = new Button("Add Project");
+		addProjectButton.addClickListener(new Button.ClickListener() {
+			public void buttonClick(ClickEvent event) {
+				removeWindow(window);
+				addProject(student);
+			}
+		});
+		layout.addComponent(addProjectButton);
+		layout.setComponentAlignment(addProjectButton, Alignment.TOP_CENTER);
 	}
 	
 	// PROJECTS -----------------------------
