@@ -6,7 +6,7 @@ import javax.ejb.Stateless;
 import javax.persistence.*;
 
 @Stateless
-public class ProjectEJB {
+public class ProjectEJB implements ProjectEJBRemote {
 	
 	private EntityManagerFactory emf = Persistence.createEntityManagerFactory("StudentApp");
 	private EntityManager em = emf.createEntityManager() ;
